@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "RWCalendar"
-  s.version      = "16"
+  s.version      = "17"
   s.summary      = "RWCalendar."
 
   # This description is used to generate tags and improve search results.
