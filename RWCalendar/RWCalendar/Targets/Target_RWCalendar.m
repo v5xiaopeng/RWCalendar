@@ -17,7 +17,7 @@
 
 @implementation Target_RWCalendar
 
-- (UIView *)Action_initCalendar{
+- (UIView *)Action_initCalendar:(NSDictionary *)params{
     _calendar = [[WZPCalendar alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0)];
     [_calendar WZPCalendarSelectedDate:^(id date) {
         WZPCalendarModel *model = date;
@@ -29,7 +29,7 @@
     return _calendar;
 }
 
-- (void)Action_setupCalendar{
+- (void)Action_setupCalendar:(NSDictionary *)params{
     [_calendar setUpView];
 }
 

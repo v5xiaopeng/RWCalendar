@@ -11,8 +11,8 @@
 
 @interface Target_RWCalendar : NSObject
 
-- (UIView *)Action_initCalendar;
+- (UIView *)Action_initCalendar:(NSDictionary *)params;
 
-- (void)Action_setupCalendar;
+- (void)Action_setupCalendar:(NSDictionary *)params;
 
 @end
