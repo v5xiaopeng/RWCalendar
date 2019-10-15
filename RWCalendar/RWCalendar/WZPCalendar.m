@@ -132,7 +132,7 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
     [nextBtn setTitle:@"下一月" forState:UIControlStateNormal];
     [nextBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [nextBtn addTarget:self action:@selector(nextMonth) forControlEvents:UIControlEventTouchUpInside];
-    nextBtn.frame = CGRectMake(kSCREEN_WIDTH*2/3, 0, kSCREEN_WIDTH, 64);
+    nextBtn.frame = CGRectMake(kSCREEN_WIDTH*2/3, 0, kSCREEN_WIDTH/3, 64);
     [_topView addSubview:nextBtn];
 //    [_currentMonthLb mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.top.bottom.equalTo(self->_topView);
