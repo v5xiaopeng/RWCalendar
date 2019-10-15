@@ -19,10 +19,7 @@
 
 - (UIView *)Action_initCalendar:(NSDictionary *)params{
     _calendar = [[WZPCalendar alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0)];
-    [_calendar WZPCalendarSelectedDate:^(id date) {
-        WZPCalendarModel *model = date;
-        NSLog(@"-%ld年%ld月%ld日 周%ld-",(long)model.year,model.month,model.day,model.week+1);
-    }];
+    
     _calendar.weekFontColor = [UIColor grayColor];
     _calendar.weekendFontColor = [UIColor orangeColor];
     _calendar.currentYearAndMonthFontColor = [UIColor redColor];
@@ -31,6 +28,14 @@
 
 - (void)Action_setupCalendar:(NSDictionary *)params{
     [_calendar setUpView];
+}
+    
+- (void)Action_setCalendarBlock:(void(^)(id date))selectedDate{
+    [_calendar WZPCalendarSelectedDate:^(id date) {
+        selectedDate(date);
+//        WZPCalendarModel *model = date;
+//        NSLog(@"-%ld年%ld月%ld日 周%ld-",(long)model.year,model.month,model.day,model.week+1);
+    }];
 }
 
 @end

@@ -14,5 +14,7 @@
 - (UIView *)Action_initCalendar:(NSDictionary *)params;
 
 - (void)Action_setupCalendar:(NSDictionary *)params;
+    
+- (void)Action_setCalendarBlock:(void(^)(id date))selectedDate;
 
 @end
