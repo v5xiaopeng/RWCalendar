@@ -30,9 +30,14 @@
     [_calendar setUpView];
 }
     
-- (void)Action_setCalendarBlock:(void(^)(id date))selectedDate{
+- (void)Action_setCalendarBlock:(NSDictionary *)params{
+    typedef void (^selectedBlock)(id);
+    selectedBlock block = params[@"block"];
+    
     [_calendar WZPCalendarSelectedDate:^(id date) {
-        selectedDate(date);
+        if (block) {
+            block(date);
+        }
 //        WZPCalendarModel *model = date;
 //        NSLog(@"-%ld年%ld月%ld日 周%ld-",(long)model.year,model.month,model.day,model.week+1);
     }];

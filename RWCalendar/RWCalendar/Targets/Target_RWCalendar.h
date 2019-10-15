@@ -15,6 +15,6 @@
 
 - (void)Action_setupCalendar:(NSDictionary *)params;
     
-- (void)Action_setCalendarBlock:(void(^)(id date))selectedDate;
+- (void)Action_setCalendarBlock:(NSDictionary *)params;
 
 @end
