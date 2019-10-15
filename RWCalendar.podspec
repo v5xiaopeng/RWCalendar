@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "RWCalendar"
-  s.version      = "6"
+  s.version      = "7"
   s.summary      = "RWCalendar."
 
   # This description is used to generate tags and improve search results.
@@ -80,7 +80,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/v5xiaopeng/RWCalendar.git", :tag => s.version.to_s }
+  s.source       = { :git => "https://github.com/v5xiaopeng/WZPRepoSpecs.git", :tag => s.version.to_s }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
