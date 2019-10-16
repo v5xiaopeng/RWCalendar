@@ -33,14 +33,14 @@
 - (void)Action_setCalendarBlock:(NSDictionary *)params{
     typedef void (^selectedBlock)(id);
     selectedBlock block = params[@"block"];
-    
-    [_calendar WZPCalendarSelectedDate:^(id date) {
-        if (block) {
-            block(date);
-        }
-//        WZPCalendarModel *model = date;
-//        NSLog(@"-%ld年%ld月%ld日 周%ld-",(long)model.year,model.month,model.day,model.week+1);
-    }];
+    _calendar.calendarSelectedDate = block;
+//    [_calendar WZPCalendarSelectedDate:^(id date) {
+//        if (block) {
+//            block(date);
+//        }
+////        WZPCalendarModel *model = date;
+////        NSLog(@"-%ld年%ld月%ld日 周%ld-",(long)model.year,model.month,model.day,model.week+1);
+//    }];
 }
 
 @end
