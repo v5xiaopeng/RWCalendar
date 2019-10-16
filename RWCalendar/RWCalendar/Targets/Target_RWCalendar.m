@@ -31,9 +31,9 @@
 }
     
 - (void)Action_setCalendarBlock:(NSDictionary *)params{
-    typedef void (^selectedBlock)(id);
-    selectedBlock block = params[@"block"];
-    _calendar.calendarSelectedDate = block;
+//    typedef void (^selectedBlock)(id);
+//    selectedBlock block = params[@"block"];
+    _calendar.calendarSelectedDate = params[@"block"];
 //    [_calendar WZPCalendarSelectedDate:^(id date) {
 //        if (block) {
 //            block(date);
