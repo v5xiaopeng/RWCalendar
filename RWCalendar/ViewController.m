@@ -10,7 +10,9 @@
 #import "Target_RWCalendar.h"
 
 typedef void (^selectedBlock)(id);
-@interface ViewController ()
+@interface ViewController (){
+    Target_RWCalendar *_targ;
+}
 
 @end
 
@@ -19,15 +21,18 @@ typedef void (^selectedBlock)(id);
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    Target_RWCalendar *targ = [[Target_RWCalendar alloc]init];
-    UIView *calendarView = [targ Action_initCalendar:nil];
+    _targ = [[Target_RWCalendar alloc]init];
+    UIView *calendarView = [_targ Action_initCalendar:nil];
     
     [self.view addSubview:calendarView];
-    [targ Action_setupCalendar:nil];
-    selectedBlock block = ^(id date){
+    [_targ Action_setupCalendar:nil];
+    [self setAblock:^(id date) {
         NSLog(@"%@",date);
-    };
-    [targ Action_setCalendarBlock:@{@"block":block}];
+    }];
+}
+- (void)setAblock:(void(^)(id date))block{
+    
+    [_targ Action_setCalendarBlock:@{@"block":block}];
 }
 
 
