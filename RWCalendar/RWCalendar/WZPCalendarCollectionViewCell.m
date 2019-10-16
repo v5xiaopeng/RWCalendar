@@ -29,7 +29,7 @@
     _dateLabel.layer.cornerRadius = (self.frame.size.height/2 - kIphone6Scale(10))/2;
     _dateLabel.clipsToBounds = YES;
     _dateLabel.backgroundColor = [UIColor clearColor];
-    _dateLabel.font = [UIFont systemFontOfSize:15.0f];
+    _dateLabel.font = [UIFont systemFontOfSize:kIphone6Scale(15.0)];
     [self.contentView addSubview:_dateLabel];
     
     _subLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, self.frame.size.height/2 + kIphone6Scale(10), self.frame.size.width, self.frame.size.height/2 - kIphone6Scale(10))];
