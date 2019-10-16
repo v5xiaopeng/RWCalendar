@@ -42,6 +42,7 @@ typedef void(^WZPSelectDate)(id date);
 - (void)setUpView;
 
 @property (nonatomic, copy) WZPSelectDate calendarSelectedDate;
+- (void)setCalendarSelectedDate:(WZPSelectDate)calendarSelectedDate;
 - (void)WZPCalendarSelectedDate:(WZPSelectDate)calendar;
 
 @end
