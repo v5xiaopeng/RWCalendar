@@ -312,9 +312,13 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
     }
     
 }
-- (void)WZPCalendarSelectedDate:(WZPSelectDate)calendar{
-    self.calendarSelectedDate = calendar;
+
+- (void)setCalendarSelectedDate:(WZPSelectDate)calendarSelectedDate{
+    _calendarSelectedDate = calendarSelectedDate;
 }
+//- (void)WZPCalendarSelectedDate:(WZPSelectDate)calendar{
+//    self.calendarSelectedDate = calendar;
+//}
 //切换月份
 - (NSArray *)getCalendarDataSoruceWithType:(WZPCalendarType)type{
     NSDateComponents *components = [[WZPCalendarDataManager sharedCalendarDataManager] dateToComponents:self.currentDate];
