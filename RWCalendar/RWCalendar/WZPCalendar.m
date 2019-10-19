@@ -253,11 +253,11 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
             if (calendarModel.day == [self.todayDayStr integerValue] && calendarModel.month == [self.todayMonthStr integerValue] && calendarModel.year == [self.todayYearStr integerValue]) {
                 cell.dateLabel.textColor = self.todayTitleColor;
                 cell.dateLabel.backgroundColor = self.todayTitleBgColor;
-                self.currentIndex = indexPath;
             }else{
                 cell.dateLabel.textColor = self.selectTitleColor;
                 cell.dateLabel.backgroundColor = self.selectTitleBgColor;
             }
+            self.currentIndex = indexPath;
         }else{
             cell.dateLabel.backgroundColor = kDEFAULT_TITLE_BG_COLOR;
             if (calendarModel.week == 5 || calendarModel.week == 6) {
@@ -316,9 +316,9 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
 - (void)setCalendarSelectedDate:(WZPSelectDate)calendarSelectedDate{
     _calendarSelectedDate = calendarSelectedDate;
 }
-- (void)WZPCalendarSelectedDate:(WZPSelectDate)calendar{
-    self.calendarSelectedDate = calendar;
-}
+//- (void)WZPCalendarSelectedDate:(WZPSelectDate)calendar{
+//    self.calendarSelectedDate = calendar;
+//}
 //切换月份
 - (NSArray *)getCalendarDataSoruceWithType:(WZPCalendarType)type{
     NSDateComponents *components = [[WZPCalendarDataManager sharedCalendarDataManager] dateToComponents:self.currentDate];
