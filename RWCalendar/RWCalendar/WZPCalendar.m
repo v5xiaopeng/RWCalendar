@@ -67,10 +67,11 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
     self = [super initWithFrame:frame];
     if (self) {
         [self initSomeColor];
-        [self setUpView];
+//        [self setUpView];
     }
     return self;
 }
+//  初始化一些颜色
 - (void)initSomeColor{
     self.currentYearAndMonthFontColor = self.currentYearAndMonthFontColor != nil ? self.currentYearAndMonthFontColor : kDEFAULT_YEARANDMONTH_COLOR;
     self.weekFontColor = self.weekFontColor != nil ? self.weekFontColor : kDEFAULT_WEEK_FONT_COLOR;
@@ -313,12 +314,11 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
     
 }
 
+
 - (void)setCalendarSelectedDate:(WZPSelectDate)calendarSelectedDate{
     _calendarSelectedDate = calendarSelectedDate;
 }
-//- (void)WZPCalendarSelectedDate:(WZPSelectDate)calendar{
-//    self.calendarSelectedDate = calendar;
-//}
+
 //切换月份
 - (NSArray *)getCalendarDataSoruceWithType:(WZPCalendarType)type{
     NSDateComponents *components = [[WZPCalendarDataManager sharedCalendarDataManager] dateToComponents:self.currentDate];

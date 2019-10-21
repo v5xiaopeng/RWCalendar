@@ -31,12 +31,12 @@ static WZPCalendarDataManager *__manager;
     return __manager;
 }
 
-//获取行数
+//  获取行数
 - (NSInteger)getNumberOfLineWithDate:(NSDate *)date{
     NSInteger tatalDay = [self numberOfDaysInCurrentMonth:date];
     NSInteger firstDay = [self startDayOfWeek:date];
     
-    // 判断日历有多少行
+    //  判断日历有多少行
     NSInteger tempDay = tatalDay + (firstDay - 1);
     NSInteger column = 0;
     if (tempDay % 7 == 0) {
@@ -47,7 +47,7 @@ static WZPCalendarDataManager *__manager;
     return column;
 }
 
-// 得到每一天的数据源
+//  得到每一天的数据源
 - (NSArray *)getcalendarModelArrayWithDate:(NSDate *)date{
     NSMutableArray *resultArray = [[NSMutableArray alloc]init];
     NSInteger tatalDay = [self numberOfDaysInCurrentMonth:date];
@@ -99,7 +99,7 @@ static WZPCalendarDataManager *__manager;
     return [_greCalendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:date].length;
 }
 
-// 确定这个月的第一天是星期几
+//  确定这个月的第一天是星期几
 - (NSUInteger)startDayOfWeek:(NSDate *)date{
     NSDate *startDate = nil;
     BOOL result = [_greCalendar rangeOfUnit:NSCalendarUnitMonth startDate:&startDate interval:NULL forDate:date];
@@ -109,12 +109,12 @@ static WZPCalendarDataManager *__manager;
     return 0;
 }
 
-// 日期转时间戳
+//  日期转时间戳
 - (NSInteger)dateToInterval:(NSDate *)date{
     return (long)[date timeIntervalSince1970];
 }
 
-#pragma mark 农历和节假日
+#pragma mark - 农历和节假日
 - (void)setChineseCalendarAndHolidayWithDate:(NSDateComponents *)components date:(NSDate *)date calendarModel:(WZPCalendarModel *)calendarModel{
     if (components.year == _todayCompontents.year && components.month == _todayCompontents.month && components.day == _todayCompontents.day) {
         calendarModel.holiday = @"今天";
@@ -171,11 +171,16 @@ static WZPCalendarDataManager *__manager;
  */
 - (BOOL)isQingMingholidayWithYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day{
     if (month == 4) {
-        NSInteger pre = year / 100;
-        float c = 4.81;
-        if (pre == 19) {
-            c = 5.59;
-        }
+//        NSInteger pre = year / 100;
+        NSArray *coefficient = @[@5.15, @5.37, @5.59, @4.82, @5.02, @5.26, @5.48, @4.70, @4.92, @5.135, @5.36, @4.60, @4.81, @5.04, @5.26];
+        
+        NSNumber *cNumber = coefficient[year / 100 - 17];
+        float c = [cNumber floatValue];
+//        float c = 4.81;
+//        if (pre == 19) {
+//            c = 5.59;
+//        }
+        
         NSInteger y = year % 100;
         NSInteger qingMingDay = (y * 0.2422 + c) - y / 4;
         if (day == qingMingDay) {
@@ -186,7 +191,7 @@ static WZPCalendarDataManager *__manager;
     return NO;
 }
 
-#pragma mark NSDate和NSCompontents转换
+#pragma mark - NSDate和NSCompontents转换
 - (NSDateComponents *)dateToComponents:(NSDate *)date{
     NSDateComponents *components = [_greCalendar components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond) fromDate:date];
     return components;

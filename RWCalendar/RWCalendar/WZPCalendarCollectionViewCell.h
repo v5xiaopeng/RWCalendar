@@ -25,6 +25,7 @@
 /** 特殊日期背景颜色 默认lightGray */
 @property (nonatomic, strong) UIColor *specialBackgroundColor;
 
+//  预留
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UILabel *dateLabel;
 @property (nonatomic, strong) UILabel *subLabel;

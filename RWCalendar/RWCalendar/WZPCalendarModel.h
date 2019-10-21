@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-/** 特殊日期 */
+/** 预留特殊日期类型 */
 typedef NS_ENUM(NSInteger, WZPCalendarSpecialDayType)
 {
     WZPCalendarSpecialDayBirthDayType = 0,  // 生日
@@ -17,13 +17,21 @@ typedef NS_ENUM(NSInteger, WZPCalendarSpecialDayType)
 
 @interface WZPCalendarModel : NSObject
 
+/** 年 */
 @property (nonatomic, assign) NSInteger year;
+/** 月 */
 @property (nonatomic, assign) NSInteger month;
+/** 日 */
 @property (nonatomic, assign) NSInteger day;
+/** 周几 */
 @property (nonatomic, assign) NSInteger week;
-@property (nonatomic, assign) NSInteger dateInterval;// 日期的时间戳
-@property (nonatomic,   copy) NSString *holiday;// 节日
-
+/** 日期的时间戳 */
+@property (nonatomic, assign) NSInteger dateInterval;
+/** 节日 */
+@property (nonatomic,   copy) NSString *holiday;
+/**
+ 预留 特殊日期类型
+ */
 @property (nonatomic, assign) WZPCalendarSpecialDayType specialDayType;
 
 @end
