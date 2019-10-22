@@ -39,7 +39,9 @@ typedef void(^WZPSelectDate)(id date);
 /** 特殊日期背景颜色 默认lightGray */
 @property (nonatomic, strong) UIColor *specialBackgroundColor;
 
-- (void)setUpView;
+
+/** 设置颜色后刷新日历 */
+- (void)reloadCalendarView;
 
 @property (nonatomic, copy) WZPSelectDate calendarSelectedDate;
 - (void)setCalendarSelectedDate:(WZPSelectDate)calendarSelectedDate;

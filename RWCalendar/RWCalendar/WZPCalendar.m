@@ -47,6 +47,7 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
 @property (nonatomic,   copy) NSString *todayDayStr;
 @property (nonatomic,   copy) NSString *todayMonthStr;
 @property (nonatomic,   copy) NSString *todayYearStr;
+@property (nonatomic, strong) NSMutableArray *weekLbs;
 
 /** 记录当前年月 */
 @property (nonatomic, strong) NSDate *currentDate;
@@ -67,7 +68,7 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
     self = [super initWithFrame:frame];
     if (self) {
         [self initSomeColor];
-//        [self setUpView];
+        [self setUpView];
     }
     return self;
 }
@@ -86,12 +87,9 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
     self.normalBackgroundColor = self.normalBackgroundColor != nil ? self.normalBackgroundColor : kDEFAULT_NORMAL_BG_COLOR;
     self.specialBackgroundColor = self.specialBackgroundColor != nil ? self.specialBackgroundColor : kDEFAULT_SPECIAL_BG_COLOR;
 }
-- (void)setCurrentYearAndMonthFontColor:(UIColor *)color{
-    _currentYearAndMonthFontColor = color;
-    _currentMonthLb.textColor = _currentYearAndMonthFontColor;
-}
 
 - (void)setUpView{
+    self.weekLbs = [[NSMutableArray alloc]initWithCapacity:0];
     self.calendarDataArr = [[NSMutableArray alloc]initWithCapacity:0];
     _dateFormatter = [[NSDateFormatter alloc]init];
     NSDate *todayDate = [NSDate date];
@@ -106,15 +104,29 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
     [self addWeekView];
     [self loadCalendarView];
 }
-//切换月份
+
+- (void)reloadCalendarView{
+    //  当前年月颜色
+    _currentMonthLb.textColor = self.currentYearAndMonthFontColor;
+    //  周一到周日颜色
+    for (int i = 0; i < self.weekLbs.count; i++) {
+        UILabel *weekLb = self.weekLbs[i];
+        if (i == 5 || i == 6) {
+            weekLb.textColor = self.weekendFontColor;
+        } else {
+            weekLb.textColor = self.weekFontColor;
+        }
+    }
+    //  每天颜色
+    [self.collectionView reloadData];
+}
+
+//  切换月份控件
 - (void)addTopView{
     _topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 64)];
     _topView.backgroundColor = [UIColor cyanColor];
     [self addSubview:_topView];
-//    [_topView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.left.right.equalTo(self);
-//        make.height.mas_equalTo(64);
-//    }];
+    
     self.currentDate = [NSDate date];
     NSString *todayStr = [_dateFormatter stringFromDate:self.currentDate];
     _currentMonthLb = [[UILabel alloc]initWithFrame:CGRectMake(kSCREEN_WIDTH/3, 0, kSCREEN_WIDTH/3, 64)];
@@ -135,46 +147,33 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
     [nextBtn addTarget:self action:@selector(nextMonth) forControlEvents:UIControlEventTouchUpInside];
     nextBtn.frame = CGRectMake(kSCREEN_WIDTH*2/3, 0, kSCREEN_WIDTH/3, 64);
     [_topView addSubview:nextBtn];
-//    [_currentMonthLb mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.bottom.equalTo(self->_topView);
-//        make.centerX.equalTo(self->_topView.mas_centerX);
-//        make.width.equalTo(lastBtn.mas_width);
-//    }];
-//    [lastBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.left.bottom.equalTo(self->_topView);
-//        make.right.equalTo(self->_currentMonthLb.mas_left);
-//        make.width.equalTo(nextBtn.mas_width);
-//    }];
-//    [nextBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.right.bottom.equalTo(self->_topView);
-//        make.left.equalTo(self->_currentMonthLb.mas_right);
-//    }];
+
 }
+//  切换月份Action
 - (void)lastMonth{
-    NSLog(@"上一月");
     __weak typeof(WZPCalendar) *weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [weakSelf.calendarDataArr removeAllObjects];
         [weakSelf.calendarDataArr addObjectsFromArray:[weakSelf getCalendarDataSoruceWithType:WZPCalendarLastType]];
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
-            _currentMonthLb.text = [_dateFormatter stringFromDate:weakSelf.currentDate];
+            self->_currentMonthLb.text = [self->_dateFormatter stringFromDate:weakSelf.currentDate];
         });
     });
 }
+
 - (void)nextMonth{
-    NSLog(@"下一月");
     __weak typeof(WZPCalendar) *weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [weakSelf.calendarDataArr removeAllObjects];
         [weakSelf.calendarDataArr addObjectsFromArray:[weakSelf getCalendarDataSoruceWithType:WZPCalendarNextType]];
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
-            _currentMonthLb.text = [_dateFormatter stringFromDate:weakSelf.currentDate];
+            self->_currentMonthLb.text = [self->_dateFormatter stringFromDate:weakSelf.currentDate];
         });
     });
 }
-//星期显示
+//  星期显示，周一到周日
 - (void)addWeekView{
     UIView *weekView = [[UIView alloc]initWithFrame:CGRectMake(0, 64, kSCREEN_WIDTH, kWeekViewHeight)];
     weekView.backgroundColor = [UIColor whiteColor];
@@ -183,6 +182,9 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
     NSArray *weekArray = @[@"一",@"二",@"三",@"四",@"五",@"六",@"日"];
     int i = 0;
     NSInteger width = kIphone6Scale(54);
+    if (self.weekLbs.count > 0) {
+        [self.weekLbs removeAllObjects];
+    }
     for (i = 0; i < 7;i++) {
         UILabel *weekLabel = [[UILabel alloc]initWithFrame:CGRectMake(i * width, 0, width, kWeekViewHeight)];
         weekLabel.backgroundColor = [UIColor whiteColor];
@@ -195,9 +197,11 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
             weekLabel.textColor = self.weekFontColor;
         }
         [weekView addSubview:weekLabel];
+        [self.weekLbs addObject:weekLabel];
     }
 }
-//加载日期
+
+//  加载日历collectionView
 - (void)loadCalendarView{
     NSInteger width = kIphone6Scale(54);
     NSInteger height = kIphone6Scale(60);
@@ -231,7 +235,8 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
         });
     });
 }
-//获取日历数据
+
+//  获取日历数据
 - (NSArray *)getCalendarData{
     _todayDate = [NSDate date];
     NSDateComponents *components = [[WZPCalendarDataManager sharedCalendarDataManager] dateToComponents:_todayDate];
@@ -240,6 +245,7 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
     
     return [[WZPCalendarDataManager sharedCalendarDataManager] getcalendarModelArrayWithDate:date];
 }
+#pragma mark - 日历每一天 collectionView delegate
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     return self.calendarDataArr.count;
 }
@@ -314,12 +320,12 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
     
 }
 
-
+//  选中日期block的set方法
 - (void)setCalendarSelectedDate:(WZPSelectDate)calendarSelectedDate{
     _calendarSelectedDate = calendarSelectedDate;
 }
 
-//切换月份
+//  切换月份
 - (NSArray *)getCalendarDataSoruceWithType:(WZPCalendarType)type{
     NSDateComponents *components = [[WZPCalendarDataManager sharedCalendarDataManager] dateToComponents:self.currentDate];
     components.day = 1;
@@ -330,6 +336,7 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
     }
     self.currentDate = [[WZPCalendarDataManager sharedCalendarDataManager] componentsToDate:components];
     self.currentIndex = nil;
+    
     return [[WZPCalendarDataManager sharedCalendarDataManager] getcalendarModelArrayWithDate:self.currentDate];
 }
 

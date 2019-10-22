@@ -10,7 +10,7 @@ sed -i "" "${LineNumber}s/${VersionNumber}/${NewVersionNumber}/g" RWCalendar.pod
 echo "current version is ${VersionNumber}, new version is ${NewVersionNumber}"
 
 git add .
-git commit -am ${NewVersionNumber}
+git commit -am '暴露接口修改'${NewVersionNumber}
 git tag ${NewVersionNumber}
 git push origin master --tags
 pod repo push WZPRepoSpecs RWCalendar.podspec --verbose --allow-warnings --use-libraries
