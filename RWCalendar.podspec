@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "RWCalendar"
-  s.version      = "43"
+  s.version      = "44"
   s.summary      = "RWCalendar."
 
   # This description is used to generate tags and improve search results.
@@ -136,5 +136,5 @@ Pod::Spec.new do |s|
   # s.dependency "BLNetworking"
   # s.dependency "BLAPIManagers"
   # s.dependency "BLMediator"
-
+s.dependency "Masonry"
 end

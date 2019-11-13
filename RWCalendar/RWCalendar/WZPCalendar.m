@@ -124,7 +124,7 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
 //  切换月份控件
 - (void)addTopView{
     _topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 64)];
-    _topView.backgroundColor = [UIColor cyanColor];
+//    _topView.backgroundColor = [UIColor cyanColor];
     [self addSubview:_topView];
     
     self.currentDate = [NSDate date];
@@ -156,6 +156,9 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
         [weakSelf.calendarDataArr removeAllObjects];
         [weakSelf.calendarDataArr addObjectsFromArray:[weakSelf getCalendarDataSoruceWithType:WZPCalendarLastType]];
         dispatch_async(dispatch_get_main_queue(), ^{
+            NSInteger lineNum = [[WZPCalendarDataManager sharedCalendarDataManager] getNumberOfLineWithDate:self.currentDate];
+            weakSelf.frame = CGRectMake(weakSelf.frame.origin.x, weakSelf.frame.origin.y, weakSelf.bounds.size.width, 64+40+kIphone6Scale(60)*lineNum);
+            weakSelf.collectionView.frame = CGRectMake(0, 64 + kWeekViewHeight, kSCREEN_WIDTH, weakSelf.bounds.size.height - 64 - kWeekViewHeight);
             [weakSelf.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
             self->_currentMonthLb.text = [self->_dateFormatter stringFromDate:weakSelf.currentDate];
         });
@@ -168,6 +171,9 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
         [weakSelf.calendarDataArr removeAllObjects];
         [weakSelf.calendarDataArr addObjectsFromArray:[weakSelf getCalendarDataSoruceWithType:WZPCalendarNextType]];
         dispatch_async(dispatch_get_main_queue(), ^{
+            NSInteger lineNum = [[WZPCalendarDataManager sharedCalendarDataManager] getNumberOfLineWithDate:self.currentDate];
+            weakSelf.frame = CGRectMake(weakSelf.frame.origin.x, weakSelf.frame.origin.y, weakSelf.bounds.size.width, 64+40+kIphone6Scale(60)*lineNum);
+            weakSelf.collectionView.frame = CGRectMake(0, 64 + kWeekViewHeight, kSCREEN_WIDTH, weakSelf.bounds.size.height - 64 - kWeekViewHeight);
             [weakSelf.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
             self->_currentMonthLb.text = [self->_dateFormatter stringFromDate:weakSelf.currentDate];
         });
@@ -181,12 +187,11 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
     
     NSArray *weekArray = @[@"一",@"二",@"三",@"四",@"五",@"六",@"日"];
     int i = 0;
-    NSInteger width = kIphone6Scale(54);
     if (self.weekLbs.count > 0) {
         [self.weekLbs removeAllObjects];
     }
     for (i = 0; i < 7;i++) {
-        UILabel *weekLabel = [[UILabel alloc]initWithFrame:CGRectMake(i * width, 0, width, kWeekViewHeight)];
+        UILabel *weekLabel = [[UILabel alloc]initWithFrame:CGRectMake(i * kSCREEN_WIDTH/7.0, 0, kSCREEN_WIDTH/7.0, kWeekViewHeight)];
         weekLabel.backgroundColor = [UIColor whiteColor];
         weekLabel.text = weekArray[i];
         weekLabel.font = [UIFont boldSystemFontOfSize:16.0f];
@@ -203,16 +208,13 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
 
 //  加载日历collectionView
 - (void)loadCalendarView{
-    NSInteger width = kIphone6Scale(54);
-    NSInteger height = kIphone6Scale(60);
+//    NSInteger width = kIphone6Scale(54);
+//    NSInteger height = kIphone6Scale(60);
     
-    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc]init];
-    flowLayout.itemSize = CGSizeMake(width, height);
-    flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
-    flowLayout.minimumInteritemSpacing = 0;
-    flowLayout.minimumLineSpacing = 0;
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    
     self.currentModel = nil;
-    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 64 + kWeekViewHeight, width * 7, self.bounds.size.height - 64 - kWeekViewHeight) collectionViewLayout:flowLayout];
+    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 64 + kWeekViewHeight, kSCREEN_WIDTH, self.bounds.size.height - 64 - kWeekViewHeight) collectionViewLayout:flowLayout];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     self.collectionView.scrollEnabled = NO;
@@ -230,7 +232,7 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
         dispatch_async(dispatch_get_main_queue(), ^{
             NSInteger lineNum = [[WZPCalendarDataManager sharedCalendarDataManager] getNumberOfLineWithDate:[NSDate date]];
             weakSelf.frame = CGRectMake(weakSelf.frame.origin.x, weakSelf.frame.origin.y, weakSelf.bounds.size.width, 64+40+kIphone6Scale(60)*lineNum);
-            weakSelf.collectionView.frame = CGRectMake(0, 64 + kWeekViewHeight, width * 7, weakSelf.bounds.size.height - 64 - kWeekViewHeight);
+            weakSelf.collectionView.frame = CGRectMake(0, 64 + kWeekViewHeight, kSCREEN_WIDTH, weakSelf.bounds.size.height - 64 - kWeekViewHeight);
             [weakSelf.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
         });
     });
@@ -244,6 +246,22 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
     NSDate *date = [[WZPCalendarDataManager sharedCalendarDataManager] componentsToDate:components];
     
     return [[WZPCalendarDataManager sharedCalendarDataManager] getcalendarModelArrayWithDate:date];
+}
+#pragma mark - UICollectionViewDelegateFlowLayout
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake([UIScreen mainScreen].bounds.size.width/7.0, kIphone6Scale(60));
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return 0;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    return 0;
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    return UIEdgeInsetsMake(0, 0, 0, 0);
 }
 #pragma mark - 日历每一天 collectionView delegate
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{

@@ -18,6 +18,7 @@
 		0444C76623555AF00015A56E /* WZPCalendarCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0444C75E23555AEF0015A56E /* WZPCalendarCollectionViewCell.m */; };
 		0444C76723555AF00015A56E /* WZPCalendarDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0444C75F23555AEF0015A56E /* WZPCalendarDataManager.m */; };
 		0444C76823555AF00015A56E /* Target_RWCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0444C76323555AEF0015A56E /* Target_RWCalendar.m */; };
+		81BCE5E5DA985DE407905FDD /* Pods_RWCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 253CF9D5BDB6BE4F0B35FA37 /* Pods_RWCalendar.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,9 @@
 		0444C76023555AEF0015A56E /* WZPCalendarModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZPCalendarModel.h; sourceTree = "<group>"; };
 		0444C76223555AEF0015A56E /* Target_RWCalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Target_RWCalendar.h; sourceTree = "<group>"; };
 		0444C76323555AEF0015A56E /* Target_RWCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Target_RWCalendar.m; sourceTree = "<group>"; };
+		253CF9D5BDB6BE4F0B35FA37 /* Pods_RWCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RWCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9E8AB9EA6225132415AE939 /* Pods-RWCalendar.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RWCalendar.debug.xcconfig"; path = "Target Support Files/Pods-RWCalendar/Pods-RWCalendar.debug.xcconfig"; sourceTree = "<group>"; };
+		B5454527CD618A2BA076D7DC /* Pods-RWCalendar.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RWCalendar.release.xcconfig"; path = "Target Support Files/Pods-RWCalendar/Pods-RWCalendar.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81BCE5E5DA985DE407905FDD /* Pods_RWCalendar.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +64,8 @@
 			children = (
 				0444C74123555A750015A56E /* RWCalendar */,
 				0444C74023555A750015A56E /* Products */,
+				DA2011B3695EC1B4CD1604FB /* Pods */,
+				913E57C965EFE1F9B4B9D7ED /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -112,6 +119,23 @@
 			path = Targets;
 			sourceTree = "<group>";
 		};
+		913E57C965EFE1F9B4B9D7ED /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				253CF9D5BDB6BE4F0B35FA37 /* Pods_RWCalendar.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DA2011B3695EC1B4CD1604FB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A9E8AB9EA6225132415AE939 /* Pods-RWCalendar.debug.xcconfig */,
+				B5454527CD618A2BA076D7DC /* Pods-RWCalendar.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -119,9 +143,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0444C75523555A790015A56E /* Build configuration list for PBXNativeTarget "RWCalendar" */;
 			buildPhases = (
+				3E2D2C4CBF97C06BF173BE49 /* [CP] Check Pods Manifest.lock */,
 				0444C73B23555A750015A56E /* Sources */,
 				0444C73C23555A750015A56E /* Frameworks */,
 				0444C73D23555A750015A56E /* Resources */,
+				C24FC06E1F2B76AF901C9176 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -176,6 +202,38 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3E2D2C4CBF97C06BF173BE49 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RWCalendar-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C24FC06E1F2B76AF901C9176 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RWCalendar/Pods-RWCalendar-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0444C73B23555A750015A56E /* Sources */ = {
@@ -327,9 +385,11 @@
 		};
 		0444C75623555A790015A56E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A9E8AB9EA6225132415AE939 /* Pods-RWCalendar.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 775DZ92H74;
 				INFOPLIST_FILE = RWCalendar/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -344,9 +404,11 @@
 		};
 		0444C75723555A790015A56E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B5454527CD618A2BA076D7DC /* Pods-RWCalendar.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 775DZ92H74;
 				INFOPLIST_FILE = RWCalendar/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (

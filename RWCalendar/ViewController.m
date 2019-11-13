@@ -20,6 +20,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    UIView *calendarView = [[Target_RWCalendar alloc] Action_initCalendar:nil];
+    
+    [self.view addSubview:calendarView];
 }
 - (void)setAblock:(void(^)(id date))block{
     
