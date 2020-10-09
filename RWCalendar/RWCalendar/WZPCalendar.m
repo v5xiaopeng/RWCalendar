@@ -7,7 +7,7 @@
 //
 
 #import "WZPCalendar.h"
-//#import "Masonry.h"
+#import <Masonry/Masonry.h>
 #import "WZPCalendarCollectionViewCell.h"
 #import "WZPCalendarDataManager.h"
 
@@ -64,13 +64,17 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
 @synthesize weekFontColor                   =_weekFontColor;
 @synthesize weekendFontColor                =_weekendFontColor;
 
-- (id)initWithFrame:(CGRect)frame{
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self initSomeColor];
-        [self setUpView];
-    }
-    return self;
+//- (id)initWithFrame:(CGRect)frame{
+//    self = [super initWithFrame:frame];
+//    if (self) {
+//        [self initSomeColor];
+//        [self setUpView];
+//    }
+//    return self;
+//}
+- (void)drawRect:(CGRect)rect{
+    [self initSomeColor];
+    [self setUpView];
 }
 //  初始化一些颜色
 - (void)initSomeColor{
@@ -123,9 +127,13 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
 
 //  切换月份控件
 - (void)addTopView{
-    _topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 64)];
+    _topView = [[UIView alloc]init];//WithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 64)];
 //    _topView.backgroundColor = [UIColor cyanColor];
     [self addSubview:_topView];
+    [_topView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.right.equalTo(self);
+        make.height.mas_equalTo(64);
+    }];
     
     self.currentDate = [NSDate date];
     NSString *todayStr = [_dateFormatter stringFromDate:self.currentDate];
@@ -134,6 +142,10 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
     _currentMonthLb.textAlignment = NSTextAlignmentCenter;
     _currentMonthLb.textColor = self.currentYearAndMonthFontColor;
     [_topView addSubview:_currentMonthLb];
+    [_currentMonthLb mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.centerX.equalTo(self->_topView);
+        make.width.mas_equalTo(self.bounds.size.width/3.0);
+    }];
     
     UIButton *lastBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [lastBtn setTitle:@"上一月" forState:UIControlStateNormal];
@@ -141,12 +153,20 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
     [lastBtn addTarget:self action:@selector(lastMonth) forControlEvents:UIControlEventTouchUpInside];
     lastBtn.frame = CGRectMake(0, 0, kSCREEN_WIDTH/3, 64);
     [_topView addSubview:lastBtn];
+    [lastBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.equalTo(self->_topView);
+        make.right.mas_equalTo(self->_currentMonthLb.mas_left);
+    }];
     UIButton *nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [nextBtn setTitle:@"下一月" forState:UIControlStateNormal];
     [nextBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [nextBtn addTarget:self action:@selector(nextMonth) forControlEvents:UIControlEventTouchUpInside];
     nextBtn.frame = CGRectMake(kSCREEN_WIDTH*2/3, 0, kSCREEN_WIDTH/3, 64);
     [_topView addSubview:nextBtn];
+    [nextBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.right.bottom.equalTo(self->_topView);
+        make.left.mas_equalTo(self->_currentMonthLb.mas_right);
+    }];
 
 }
 //  切换月份Action
@@ -156,9 +176,10 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
         [weakSelf.calendarDataArr removeAllObjects];
         [weakSelf.calendarDataArr addObjectsFromArray:[weakSelf getCalendarDataSoruceWithType:WZPCalendarLastType]];
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSInteger lineNum = [[WZPCalendarDataManager sharedCalendarDataManager] getNumberOfLineWithDate:self.currentDate];
-            weakSelf.frame = CGRectMake(weakSelf.frame.origin.x, weakSelf.frame.origin.y, weakSelf.bounds.size.width, 64+40+kIphone6Scale(60)*lineNum);
-            weakSelf.collectionView.frame = CGRectMake(0, 64 + kWeekViewHeight, kSCREEN_WIDTH, weakSelf.bounds.size.height - 64 - kWeekViewHeight);
+            NSInteger lineNum = [[WZPCalendarDataManager sharedCalendarDataManager] getNumberOfLineWithDate:weakSelf.currentDate];
+            [weakSelf.collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.height.mas_equalTo(kIphone6Scale(60)*lineNum);
+            }];
             [weakSelf.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
             self->_currentMonthLb.text = [self->_dateFormatter stringFromDate:weakSelf.currentDate];
         });
@@ -171,9 +192,10 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
         [weakSelf.calendarDataArr removeAllObjects];
         [weakSelf.calendarDataArr addObjectsFromArray:[weakSelf getCalendarDataSoruceWithType:WZPCalendarNextType]];
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSInteger lineNum = [[WZPCalendarDataManager sharedCalendarDataManager] getNumberOfLineWithDate:self.currentDate];
-            weakSelf.frame = CGRectMake(weakSelf.frame.origin.x, weakSelf.frame.origin.y, weakSelf.bounds.size.width, 64+40+kIphone6Scale(60)*lineNum);
-            weakSelf.collectionView.frame = CGRectMake(0, 64 + kWeekViewHeight, kSCREEN_WIDTH, weakSelf.bounds.size.height - 64 - kWeekViewHeight);
+            NSInteger lineNum = [[WZPCalendarDataManager sharedCalendarDataManager] getNumberOfLineWithDate:weakSelf.currentDate];
+            [weakSelf.collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.height.mas_equalTo(kIphone6Scale(60)*lineNum);
+            }];
             [weakSelf.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
             self->_currentMonthLb.text = [self->_dateFormatter stringFromDate:weakSelf.currentDate];
         });
@@ -181,17 +203,23 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
 }
 //  星期显示，周一到周日
 - (void)addWeekView{
-    UIView *weekView = [[UIView alloc]initWithFrame:CGRectMake(0, 64, kSCREEN_WIDTH, kWeekViewHeight)];
+    UIView *weekView = [[UIView alloc]init];//WithFrame:CGRectMake(0, 64, kSCREEN_WIDTH, kWeekViewHeight)];
     weekView.backgroundColor = [UIColor whiteColor];
     [self addSubview:weekView];
+    [weekView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self->_topView.mas_bottom);
+        make.left.right.equalTo(self);
+        make.height.mas_equalTo(kWeekViewHeight);
+    }];
     
     NSArray *weekArray = @[@"一",@"二",@"三",@"四",@"五",@"六",@"日"];
     int i = 0;
     if (self.weekLbs.count > 0) {
         [self.weekLbs removeAllObjects];
     }
+    CGFloat perWeekWidth = self.bounds.size.width/7.0;
     for (i = 0; i < 7;i++) {
-        UILabel *weekLabel = [[UILabel alloc]initWithFrame:CGRectMake(i * kSCREEN_WIDTH/7.0, 0, kSCREEN_WIDTH/7.0, kWeekViewHeight)];
+        UILabel *weekLabel = [[UILabel alloc]initWithFrame:CGRectMake(i * perWeekWidth, 0, perWeekWidth, kWeekViewHeight)];
         weekLabel.backgroundColor = [UIColor whiteColor];
         weekLabel.text = weekArray[i];
         weekLabel.font = [UIFont boldSystemFontOfSize:16.0f];
@@ -202,6 +230,12 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
             weekLabel.textColor = self.weekFontColor;
         }
         [weekView addSubview:weekLabel];
+        [weekLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(weekView);
+            make.left.mas_equalTo(i * perWeekWidth);
+            make.width.mas_equalTo(perWeekWidth);
+            make.height.mas_equalTo(kWeekViewHeight);
+        }];
         [self.weekLbs addObject:weekLabel];
     }
 }
@@ -222,6 +256,12 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
     self.collectionView.showsVerticalScrollIndicator = NO;
     self.collectionView.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.collectionView];
+    NSInteger lineNum = [[WZPCalendarDataManager sharedCalendarDataManager] getNumberOfLineWithDate:self.currentDate];
+    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(64 + kWeekViewHeight);
+        make.left.bottom.right.equalTo(self);
+        make.height.mas_equalTo(kIphone6Scale(60)*lineNum);
+    }];
     
     [self.collectionView registerClass:[WZPCalendarCollectionViewCell class] forCellWithReuseIdentifier:@"WZPCalendarCollectionViewCell"];
     
@@ -231,8 +271,9 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
         [weakSelf.calendarDataArr addObjectsFromArray:[weakSelf getCalendarData]];
         dispatch_async(dispatch_get_main_queue(), ^{
             NSInteger lineNum = [[WZPCalendarDataManager sharedCalendarDataManager] getNumberOfLineWithDate:[NSDate date]];
-            weakSelf.frame = CGRectMake(weakSelf.frame.origin.x, weakSelf.frame.origin.y, weakSelf.bounds.size.width, 64+40+kIphone6Scale(60)*lineNum);
-            weakSelf.collectionView.frame = CGRectMake(0, 64 + kWeekViewHeight, kSCREEN_WIDTH, weakSelf.bounds.size.height - 64 - kWeekViewHeight);
+            [weakSelf.collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.height.mas_equalTo(kIphone6Scale(60)*lineNum);
+            }];
             [weakSelf.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
         });
     });
@@ -249,7 +290,7 @@ typedef NS_ENUM(NSInteger, WZPCalendarType)
 }
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake([UIScreen mainScreen].bounds.size.width/7.0, kIphone6Scale(60));
+    return CGSizeMake(self.bounds.size.width/7.0, kIphone6Scale(60));
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {

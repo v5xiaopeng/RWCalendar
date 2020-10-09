@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "WZPCalendarModel.h"
 
-typedef void(^WZPSelectDate)(id date);
+typedef void(^WZPSelectDate)(WZPCalendarModel *date);
 
 @interface WZPCalendar : UIView
 
